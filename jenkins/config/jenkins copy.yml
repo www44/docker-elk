@@ -1,0 +1,58 @@
+jenkins:
+jobs:
+- script: >
+    folder('testjobs')
+- script: >
+    pipelineJob('testjobs/job1') {
+      definition {
+        cps {
+          script("""\ 
+            pipeline {
+              agent any
+              options {timestamps()}
+              triggers {cron('*/2 * * * *')}
+              stages {
+                stage ('checkout') {
+                  steps {
+                    echo "hello"
+                    checkout([$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[url: 'http://docker-elk_gitlab_1/root/prj1.git']]])
+                  }
+                }
+                stage ('ls') {
+                  steps {
+                      sh 'ls -la'
+                  }
+                }
+              }
+            }
+          }""".stripIndent())
+        }
+      }
+    }
+- script: >
+    pipelineJob('testjobs/job2') {
+      definition {
+        cps {
+          script("""\ 
+            pipeline {
+              agent any
+              options {timestamps()}
+              triggers {cron('*/2 * * * *')}
+              stages {
+                stage ('checkout') {
+                  steps {
+                    echo "hello"
+                    checkout([$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[url: 'http://docker-elk_gitlab_1/root/no_such_project.git']]])
+                  }
+                }
+                stage ('ls') {
+                  steps {
+                      sh 'ls -la'
+                  }
+                }
+              }
+            }
+          }""".stripIndent())
+        }
+      }
+    }

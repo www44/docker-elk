@@ -1,0 +1,17 @@
+filebeat.inputs:
+- type: log
+  enabled: true
+  paths:
+    - /var/log/supervisor/gitlab-supervisor-stdout.log
+  multiline.pattern: '^==>'
+  multiline.negate: true
+  multiline.match: after
+
+output.elasticsearch:
+  hosts: ["docker-elk_elasticsearch_1:9200"]
+  username: "elastic"  
+  password: "changeme"
+setup.kibana:
+  host: "docker-elk_kibana_1:5601"
+  username: "elastic"  
+  password: "changeme"

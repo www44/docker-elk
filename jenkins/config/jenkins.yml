@@ -1,0 +1,29 @@
+jenkins:
+jobs:
+- script: >
+    folder('testjobs')
+- script: >
+    pipelineJob('testjobs/default-agent') {
+      definition {
+        cps {
+          script("""\
+            pipeline {
+              agent any
+              options {timestamps()}
+              triggers {cron('*/2 * * * *')}
+              stages {
+                stage ('checkout') {
+                  steps {
+                    echo "hello"
+                  }
+                }
+                stage ('ls') {
+                  steps {
+                      sh 'ls -la'
+                  }
+                }
+              }
+            }""".stripIndent())
+        }
+      }
+    }

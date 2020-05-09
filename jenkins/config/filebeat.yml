@@ -1,0 +1,19 @@
+filebeat.inputs:
+- type: log
+  enabled: true
+  paths:
+  - /var/log/supervisor/jenkins-supervisor-stdout.log
+  #2020-05-09 14:45:06.814+0000 [id=14]
+  #multiline.pattern: '^[A-Z]{1}[a-z]{2} {1,2}[0-9]{1,2}, [0-9]{4} {1,2}[0-9]{1,2}:[0-9]{2}:[0-9]{2}'
+  multiline.pattern: '^[0-9]{4}-[0-9]{2}-[0-9]{2}.*\['
+  multiline.negate: true
+  multiline.match: after
+
+output.elasticsearch:
+  hosts: ["docker-elk_elasticsearch_1:9200"]
+  username: "elastic"  
+  password: "changeme"
+setup.kibana:
+  host: "docker-elk_kibana_1:5601"
+  username: "elastic"  
+  password: "changeme"
