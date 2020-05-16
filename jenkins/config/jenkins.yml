@@ -10,7 +10,7 @@ jobs:
             pipeline {
               agent any
               options {timestamps()}
-              triggers {cron('*/2 * * * *')}
+              triggers {cron('H/2 * * * *')}
               stages {
                 stage ('checkout') {
                   steps {

@@ -1,0 +1,16 @@
+heartbeat.monitors:
+- type: http
+  id: gitlab-status
+  name: Gitlab Status
+  hosts: ["http://localhost:80/-/health"]
+  check.response.status: [200]
+  schedule: '@every 5s'
+
+output.elasticsearch:
+  hosts: ["docker-elk_elasticsearch_1:9200"]
+  username: "elastic"  
+  password: "changeme"
+setup.kibana:
+  host: "docker-elk_kibana_1:5601"
+  username: "elastic"  
+  password: "changeme"
